@@ -254,7 +254,9 @@ public class Form<T> implements FormAdapter<T> {
         {
             for(String key : groupItems.keySet())
             {
-                if(key.equals(name)) // keys maybe used multiple times
+//                if(key.equals(name) || key.startsWith(name + "_"))
+//                if(key.startsWith(name)) // keys maybe used multiple times
+                    if(key.equals(name)) // keys maybe used multiple times
                 {
                     visitor.visit(groupItems.get(key));
                 }
