@@ -250,13 +250,14 @@ public class Form<T> implements FormAdapter<T> {
     }
 
     private void visitItem(final String name, FormItemVisitor visitor) {
+        String namePrefix = name + "_";
         for(Map<String, FormItem> groupItems : formItems.values())
         {
             for(String key : groupItems.keySet())
             {
-//                if(key.equals(name) || key.startsWith(name + "_"))
+                if(key.equals(name) || key.startsWith(namePrefix))
 //                if(key.startsWith(name)) // keys maybe used multiple times
-                    if(key.equals(name)) // keys maybe used multiple times
+//                    if(key.equals(name)) // keys maybe used multiple times
                 {
                     visitor.visit(groupItems.get(key));
                 }
