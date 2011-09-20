@@ -65,6 +65,9 @@ public class ListBoxItemTest extends GWTTestCase {
         lbi.setValue("b");
         assertEquals("b", lbi.getValue());
 
+        listBox.setSelectedIndex(0);
+        assertEquals("a", lbi.getValue());
+
         lbi.setChoices(Collections.singleton("d"), "d");
         assertEquals(1, listBox.getItemCount());
         assertEquals("d", listBox.getItemText(0));

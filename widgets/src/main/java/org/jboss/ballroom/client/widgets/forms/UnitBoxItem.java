@@ -19,6 +19,7 @@
 package org.jboss.ballroom.client.widgets.forms;
 
 import java.util.Collection;
+import java.util.TreeSet;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -35,8 +36,8 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
     private final Class<T> valueClass;
-    private final TextBox textBox;
-    private final ListBox unitBox;
+    final TextBox textBox;
+    final ListBox unitBox;
     private String defaultUnit;
     private final HorizontalPanel wrapper;
     private final UnitFieldFormItem unitFieldFormItem;
@@ -103,10 +104,6 @@ public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
         }
     }
 
-    public String getUnitValue() {
-        return unitBox.getItemText(unitBox.getSelectedIndex());
-    }
-
     @Override
     public void setValue(T value) {
         textBox.setValue("" + value);
@@ -135,13 +132,15 @@ public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
 
     @Override
     public void setChoices(Collection<String> units, String defUnit) {
+        TreeSet<String> sortedUnits = new TreeSet<String>(units);
+        if (defUnit != null)
+            if (!sortedUnits.contains(defUnit))
+                sortedUnits.add(defUnit);
+
         defaultUnit = defUnit;
 
         unitBox.clear();
-        if (!units.contains(defUnit))
-            unitBox.addItem(defUnit);
-
-        for(String unit : units) {
+        for(String unit : sortedUnits) {
             unitBox.addItem(unit);
         }
 
@@ -162,7 +161,7 @@ public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
             int idx = unitBox.getSelectedIndex();
             if (idx >= 0)
                 return unitBox.getItemText(idx);
-            return "";
+            return null;
         }
 
         @Override
@@ -175,8 +174,10 @@ public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
                 }
             }
 
-            if (idx == -1)
-                return; // cannot set the value as its not in the list of available units
+            if (idx == -1) {
+                unitBox.setSelectedIndex(-1);
+                return;
+            }
 
             unitBox.setSelectedIndex(idx);
         }
