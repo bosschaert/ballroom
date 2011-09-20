@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class ListBoxItem extends FormItem<String> implements ChoiceItem<String> {
     protected ListBox listBox;
     private HorizontalPanel wrapper;
+    ChangeHandler valueChangeHandler;
 
     public ListBoxItem(String name, String title) {
         super(name, title);
@@ -43,12 +44,13 @@ public class ListBoxItem extends FormItem<String> implements ChoiceItem<String> 
         listBox.setTitle(title);
         listBox.setVisibleItemCount(1);
 
-        listBox.addChangeHandler(new ChangeHandler() {
+        valueChangeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
                 isModified = true;
             }
-        });
+        };
+        listBox.addChangeHandler(valueChangeHandler);
 
         wrapper = new HorizontalPanel();
         wrapper.add(listBox);
@@ -77,6 +79,8 @@ public class ListBoxItem extends FormItem<String> implements ChoiceItem<String> 
 
         if (idx >= 0)
             listBox.setSelectedIndex(idx);
+        else
+            listBox.setSelectedIndex(-1);
     }
 
     @Override
