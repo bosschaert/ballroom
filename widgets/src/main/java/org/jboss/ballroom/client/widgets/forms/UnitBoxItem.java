@@ -39,8 +39,10 @@ public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
     final TextBox textBox;
     final ListBox unitBox;
     private String defaultUnit;
+    ValueChangeHandler<String> textValueChangeHandler;
     private final HorizontalPanel wrapper;
     private final UnitFieldFormItem unitFieldFormItem;
+    ChangeHandler unitValueChangeHandler;
 
     public UnitBoxItem(String name, String unitName, String title, Class<T> cls) {
         super(name, title);
@@ -50,24 +52,26 @@ public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
         textBox = new TextBox();
         textBox.setName(name);
         textBox.setTitle(title);
-        textBox.addValueChangeHandler(new ValueChangeHandler<String>() {
+        textValueChangeHandler = new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
                 isModified = true;
             }
-        });
+        };
+        textBox.addValueChangeHandler(textValueChangeHandler);
 
         unitBox = new ListBox();
         unitBox.setVisibleItemCount(1);
         unitBox.setName(unitName);
         unitFieldFormItem = new UnitFieldFormItem(unitName);
 
-        unitBox.addChangeHandler(new ChangeHandler() {
+        unitValueChangeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
                 isModified = true;
             }
-        });
+        };
+        unitBox.addChangeHandler(unitValueChangeHandler);
 
         wrapper = new HorizontalPanel();
         wrapper.add(textBox);

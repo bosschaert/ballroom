@@ -130,4 +130,27 @@ public class UnitBoxItemTest extends GWTTestCase {
         assertTrue(ubi.validate(Integer.MIN_VALUE));
         assertTrue(ubi.validate(Integer.MAX_VALUE));
     }
+
+    @Test
+    public void testRendering() {
+        UnitBoxItem<String> ubi = new UnitBoxItem<String>("amount", "units", "Amount", String.class);
+        assertTrue(ubi.render());
+        assertFalse("The unit item should return false on its render method as its rendered as part of the main control",
+            ubi.getUnitItem().render());
+    }
+
+    @Test
+    public void testModification() {
+        UnitBoxItem<String> ubi = new UnitBoxItem<String>("amount", "units", "Amount", String.class);
+        ubi.setChoices(Arrays.asList("x", "y", "z"), "y");
+        assertFalse("Precondition", ubi.isModified);
+        ubi.textValueChangeHandler.onValueChange(null);
+        assertTrue(ubi.isModified());
+
+        ubi.resetMetaData();
+        assertFalse(ubi.isModified());
+
+        ubi.unitValueChangeHandler.onChange(null);
+        assertTrue(ubi.isModified());
+    }
 }

@@ -94,9 +94,9 @@ public class ListBoxItemTest extends GWTTestCase {
         lbi.setChoices(Arrays.asList("And one", "And two"), "And one");
         assertFalse("Precondition", lbi.isModified());
         lbi.valueChangeHandler.onChange(null);
-        assertTrue(lbi.isModified);
+        assertTrue(lbi.isModified());
         lbi.resetMetaData();
-        assertFalse(lbi.isModified);
+        assertFalse(lbi.isModified());
     }
 
     private ListBox findListBox(ComplexPanel panel) {
