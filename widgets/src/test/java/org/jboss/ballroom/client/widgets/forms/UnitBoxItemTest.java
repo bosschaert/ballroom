@@ -21,6 +21,10 @@ package org.jboss.ballroom.client.widgets.forms;
 import java.util.Arrays;
 
 import com.google.gwt.junit.client.GWTTestCase;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
 import org.junit.Test;
 
@@ -62,5 +66,68 @@ public class UnitBoxItemTest extends GWTTestCase {
 
         ubi.unitBox.setSelectedIndex(1);
         assertEquals("pounds", ubi.getUnitItem().getValue());
+
+        assertTrue(ubi.validate("Hi"));
+        assertFalse(ubi.validate("Hi there"));
+        assertFalse(ubi.validate(""));
+        assertFalse(ubi.validate(" "));
+    }
+
+    @Test
+    public void testWidget() {
+        UnitBoxItem<String> ubi = new UnitBoxItem<String>("amount", "units", "Amount", String.class);
+        ComplexPanel widget = (ComplexPanel) ubi.asWidget();
+        TextBox foundTextBox = null;
+        ListBox foundListBox = null;
+        for (int i=0; i < widget.getWidgetCount(); i++) {
+            Widget child = widget.getWidget(i);
+            if (child instanceof TextBox)
+                foundTextBox = (TextBox) child;
+
+            if (child instanceof ListBox)
+                foundListBox = (ListBox) child;
+        }
+
+        assertNotNull(foundTextBox);
+        assertNotNull(foundListBox);
+
+        assertTrue(foundTextBox.isEnabled());
+        assertTrue(foundTextBox.isEnabled());
+
+        ubi.setEnabled(false);
+        assertFalse(foundTextBox.isEnabled());
+        assertFalse(foundTextBox.isEnabled());
+
+        ubi.setEnabled(true);
+        assertTrue(foundTextBox.isEnabled());
+        assertTrue(foundTextBox.isEnabled());
+    }
+
+    @Test
+    public void testLong() {
+        UnitBoxItem<Long> ubi = new UnitBoxItem<Long>("amount", "units", "Amount", Long.class);
+        ubi.setValue(Long.MAX_VALUE);
+        assertEquals("" + Long.MAX_VALUE, ubi.textBox.getText());
+        ubi.textBox.setText("" + Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE), ubi.getValue());
+
+        assertTrue(ubi.validate(0L));
+        assertTrue(ubi.validate(2L));
+        assertTrue(ubi.validate(Long.MIN_VALUE));
+        assertTrue(ubi.validate(Long.MAX_VALUE));
+    }
+
+    @Test
+    public void testInteger() {
+        UnitBoxItem<Integer> ubi = new UnitBoxItem<Integer>("amount", "units", "Amount", Integer.class);
+        ubi.setValue(Integer.MAX_VALUE);
+        assertEquals("" + Integer.MAX_VALUE, ubi.textBox.getText());
+        ubi.textBox.setText("" + Integer.MIN_VALUE);
+        assertEquals(new Integer(Integer.MIN_VALUE), ubi.getValue());
+
+        assertTrue(ubi.validate(0));
+        assertTrue(ubi.validate(2));
+        assertTrue(ubi.validate(Integer.MIN_VALUE));
+        assertTrue(ubi.validate(Integer.MAX_VALUE));
     }
 }

@@ -117,8 +117,21 @@ public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
 
     @Override
     public boolean validate(T value) {
-        // TODO Auto-generated method stub
-        return true;
+        if (valueClass.equals(Long.class) || valueClass.equals(Integer.class))
+            // if it's a long or an int then we can just check that the value passed in is the same.
+            return value.getClass().equals(valueClass);
+
+        if (valueClass.equals(String.class)) {
+            String strVal = (String) value;
+
+            if (isRequired() && strVal.equals(""))
+                return false;
+            else
+                return !strVal.contains(" ");
+        }
+
+        // can't validate this type
+        return false;
     }
 
     @Override
