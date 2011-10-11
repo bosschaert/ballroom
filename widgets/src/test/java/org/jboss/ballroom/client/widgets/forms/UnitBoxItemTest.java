@@ -151,6 +151,6 @@ public class UnitBoxItemTest extends GWTTestCase {
         assertFalse(ubi.isModified());
 
         ubi.unitValueChangeHandler.onChange(null);
-        assertTrue(ubi.isModified());
+        assertTrue(ubi.getUnitItem().isModified());
     }
 }

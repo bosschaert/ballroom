@@ -68,7 +68,7 @@ public class UnitBoxItem<T> extends FormItem<T> implements ChoiceItem<String> {
         unitValueChangeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
-                setModified(true);
+                unitFieldFormItem.setModified(true);
             }
         };
         unitBox.addChangeHandler(unitValueChangeHandler);
